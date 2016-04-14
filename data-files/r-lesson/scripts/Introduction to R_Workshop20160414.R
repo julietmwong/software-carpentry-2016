@@ -238,12 +238,16 @@ letter
 # Challenge - Using loops
 seq(3)
 # Using seq, write a function that prints the first N natural numbers, one per line:
-print_N <- function(num) {
-  for (n in seq(num)) {
+print_N <- function(natural_number) {
+  # Function prints natural numbers
+  # Input is a number
+  container_of_numbers <- seq(natural_number)
+  for (n in container_of_numbers) {
     print(n)
   }
 }
 print_N(3)
+print_N(10)
 
 # Write a function called total that calculates the sum of the values in a vector
 # R has a built-in cuntion called sum that does this for you, but don't use it now
@@ -272,3 +276,19 @@ expo <- function(base, exponent) {
 expo(3,0)
 expo(3,2)
 expo(2,4)
+expo(3,3)
+
+# Processing Multiple Files
+# Loop through files analysis
+list.files()
+# to grab a bunch of files; uses wildcard syntax
+Sys.glob("*.csv")
+Sys.glob("i*.csv")
+list.files(pattern="inflammation")
+# Glob my files
+filenames <- Sys.glob("i*.csv")
+# Run the analysis on each file
+for(file in filenames){
+  print(file)
+  analyze(file)
+}
