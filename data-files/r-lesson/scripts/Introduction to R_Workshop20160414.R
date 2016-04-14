@@ -164,3 +164,111 @@ fence <- function(original, wrapper){
   return(c(wrapper, original, wrapper))
 }
 fence(best_practice, asterisk)
+
+
+#-----------------------
+# LOOP LESSON
+getwd()
+list.files()
+
+# Analyzing multiple data sets
+# Create a function that creates graphs of the minimum, average, and maximum daily inflammation rates for a single data set
+analyze <- function(filename) {
+  # Plots the average, min, and max inflammation over time.
+  # Input is character string of a csv file.
+  dat <- read.csv(file = filename, header = FALSE)
+  avg_day_inflammation <- apply(dat, 2, mean)
+  plot(avg_day_inflammation)
+  max_day_inflammation <- apply(dat, 2, max)
+  plot(max_day_inflammation)
+  min_day_inflammation <- apply(dat, 2, min)
+  plot(min_day_inflammation)
+}
+analyze("inflammation-01.csv")
+analyze("inflammation-02.csv")
+
+# Rather than analyzing each data set individually, we can use for loops
+# FOR LOOPS
+best_practice <- c("Let", "the", "computer", "do", "the", "work")
+best_practice
+# Write a function that prints out each individual word
+print_words <- function(sentence) {
+  # Function prints a sentence
+  print(sentence[1])
+  print(sentence[2])
+  print(sentence[3])
+  print(sentence[4])
+  print(sentence[5])
+  print(sentence[6])
+}
+print_words(best_practice)
+# Exclude the 6th element (the 6th word) in the sentence
+print_words(best_practice[-6])
+# Instead, use a for loop
+print_words <- function(sentence) {
+  for (word in sentence) {
+    print(word)
+  }
+}
+print_words(best_practice)
+print_words(best_practice[-6])
+
+# In general, the body of a form loop is:
+# for(variablie in collection){
+# do things with variable
+# }
+
+# Another loop example
+len <- 0
+vowels <- c("a","e","i","o","u")
+for (v in vowels) {
+  print(len)
+  len <- len +1
+}
+# Number of vowels
+len
+
+letter <- "z"
+for (letter in c("a","b","c")) {
+  print(letter)
+}
+# After the loop, letter is "c"
+letter
+
+# Challenge - Using loops
+seq(3)
+# Using seq, write a function that prints the first N natural numbers, one per line:
+print_N <- function(num) {
+  for (n in seq(num)) {
+    print(n)
+  }
+}
+print_N(3)
+
+# Write a function called total that calculates the sum of the values in a vector
+# R has a built-in cuntion called sum that does this for you, but don't use it now
+ex_vec <- c(4,8,15,16,23,42)
+total <- function(vect) {
+  # Sums a vector
+  tot = 0
+  for (n in vect) {
+    tot = tot + n
+  }
+  return(tot)
+}
+total(ex_vec)
+
+expo <- function(base, exponent) {
+  tot = 1
+  #Accounts for exponent = 0. Don't worry about this for now
+  if(exponent ==0) {
+    return(tot)
+  }
+  for (i in 1:exponent){
+    tot = tot * base
+  }
+  return(tot)
+}
+expo(3,0)
+expo(3,2)
+expo(2,4)
