@@ -292,3 +292,86 @@ for(file in filenames){
   print(file)
   analyze(file)
 }
+
+
+#-----------------------------
+# MAKING CHOICES
+analyze <- function(filename) {
+  # Plots the average, min, and max inflammation over time.
+  # Input is character string of a csv file.
+  dat <- read.csv(file = filename, header = FALSE)
+  avg_day_inflammation <- apply(dat, 2, mean)
+  plot(avg_day_inflammation)
+  max_day_inflammation <- apply(dat, 2, max)
+  plot(max_day_inflammation)
+  min_day_inflammation <- apply(dat, 2, min)
+  plot(min_day_inflammation)
+}
+
+analyze_all <- function(pattern) {
+  # Runs the function analyze for each file in the current working directory
+  # that contains the given pattern.
+  filenames <- list.files(path = "data", pattern = pattern, full.names = TRUE)
+  for (f in filenames) {
+    analyze(f)
+  }
+}
+
+# Tell R to make a pdf of inflammation-01.csv
+pdf("inflammation-01.pdf")
+# Once we run analyze, the graphs will be printed to the pdf file we created
+analyze("inflammation-01.csv")
+# Need to turn off or else all graphs following this will run to the same pdf
+dev.off()
+
+
+#------------------
+# Conditionals
+# In order to update our function to decide between saving or not, 
+# we need to write code that automatically decides b/w multiple options
+num <- 102
+if (num > 100) {
+  print("greater")
+} else {
+  print("not greater")
+}
+print("done")
+
+num > 100
+num < 100
+
+# Dont need to include an "else" statement;
+# If false, the conditional statement won't return anything
+num <- 53
+if (num >100) {
+  print("nm is greater than 100")
+}
+
+# We can chain several tests together
+sign <- function(num) {
+  if (num > 0) {
+    return(1)
+  } else if (num == 0) {
+    # "==" means if number is "set equal to" 0; a test of equality
+    return(0)
+  } else {
+    return(-1)
+  }
+}
+sign(-3)
+sign(2)
+sign(0)
+
+# We can have a string of tests using an ampersand
+if (1 > 0 & -1 >0) {
+  print("both parts are true")
+} else {
+  print("at leat one part is not true")
+}
+# a | is true if either part is true; this is an "or" statement
+if (1 > 0 | -1 > 0) {
+  print("at least one part is true")
+} else {
+  print("neither part is true")
+}
+
