@@ -1,5 +1,6 @@
 # Introduction to R; Software Carpentry Workshop
 # 14Apr16
+detach()
 
 #-------------------------
 # LOADING DATA
@@ -115,3 +116,51 @@ sd_day_inflammation <- apply(dat,2,sd)
 sd_day_inflammation
 plot(sd_day_inflammation)
 
+
+#-------------------------
+# CREATING FUNCTIONS
+getwd()
+list.files()
+# gives structure 
+str(read.csv)
+
+temp <- 67
+# define a function for converting from Fahrenheit to Kelvin
+fahr_to_kelvin <- function(temp){
+  kelvin <- ((temp - 32) * (5/9)) +273.15
+  return(kelvin)
+}
+fahr_to_kelvin(67)
+fahr_to_kelvin(temp)
+# freezing point of water
+fahr_to_kelvin(32)
+
+# Composing Functions
+# define a function for converting Kelvin into Celsius
+kelvin_to_celsius <- function(temp) {
+  celsius <- temp - 273.15
+  return(celsius)
+}
+# absolute zero in Celsius
+kelvin_to_celsius(0)
+
+
+# Create a new function by composing the two functions we have already created
+# To convert Fahrenheit to Celcius
+fahr_to_celsius <- function(temp) {
+  temp_k <- fahr_to_kelvin(temp)
+  result <- kelvin_to_celsius(temp_k)
+  return(result)
+}
+# freezing point of water in Celsius
+fahr_to_celsius(32.0)
+
+# Challenge - Create a function
+best_practice <- c("Write", "programs", "for", "people", "not", "computers")
+asterisk <- "***" 
+# R interprets a variable with a single value as a vector with one element
+# Create a fence function
+fence <- function(original, wrapper){
+  return(c(wrapper, original, wrapper))
+}
+fence(best_practice, asterisk)
