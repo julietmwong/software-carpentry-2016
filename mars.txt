@@ -1,10 +1,7 @@
 Cold and dry, but everything is my favorite colour
 The moons might be a problem.
-<<<<<<< HEAD
-Planets are nice
-=======
->>>>>>> ec633a6d0470111333983d904608cf076985a189
 
+Planets are nice
 
 What a bad file!!!!!
 
@@ -13,3 +10,4 @@ What a bad file!!!!!
   MM
 
 Fanged kitty cat!	
+
