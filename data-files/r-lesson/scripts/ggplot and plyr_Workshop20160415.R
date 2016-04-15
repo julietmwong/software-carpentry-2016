@@ -99,5 +99,3 @@ h <- dat %>%
 # Can also use $ to pull out specific columns
 dat$order
 dat$adult_head_body_len_mm
-
-# Test pushing to github
