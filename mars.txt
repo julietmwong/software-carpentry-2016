@@ -1,3 +1,6 @@
 Cold and dry, but everything is my favorite colour
 The moons might be a problem.
+<<<<<<< HEAD
 Planets are nice
+=======
+>>>>>>> ec633a6d0470111333983d904608cf076985a189
