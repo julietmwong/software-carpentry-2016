@@ -99,3 +99,139 @@ h <- dat %>%
 # Can also use $ to pull out specific columns
 dat$order
 dat$adult_head_body_len_mm
+
+
+#------------------------
+# ggplot
+
+# set working directory
+getwd()
+setwd("~/Desktop/software-carpentry-2016")
+
+# install (if not already) and load package
+install.packages("ggplot2")
+library(ggplot2)
+
+# Loading mammals dataset for ggplot exercise:
+mammals <-  read.csv(file.choose())
+
+# Build a scatter plot of mammal body size and litter size
+# Use aes for aesthetics; how to arrange data points (i.e. x and y)
+# geom tells what visual representation to put the data in (points, lines, etc.)
+myplot <- ggplot(data = mammals, aes(x=adult_body_mass_g, y = adult_head_body_len_mm)) +
+  geom_points() +
+  scale_x_log10()
+myplot
+# There are many different geometric objects that you can use (e.g. geom_boxplot(), geom_text())
+
+# Changing the aesthetics of a geom
+# Set the size of the data points
+myplot <- ggplot(data = mammals, aes(x=adult_body_mass_g, y = adult_head_body_len_mm)) +
+  geom_point(size=3) +
+  scale_x_log10()
+myplot
+
+# See how the orders differ
+myplot <- ggplot(data = mammals, aes(x=adult_body_mass_g, y = adult_head_body_len_mm)) +
+  geom_point(size=3, aes(color=order)) +
+  scale_x_log10()
+myplot
+
+# We can set color order to a continuous variable (i.e. liter size)
+myplot <- ggplot(data = mammals, aes(x=adult_body_mass_g, y = adult_head_body_len_mm)) +
+  geom_point(size=3, aes(color=litter_size)) +
+  scale_x_log10()
+myplot
+
+# Plot a histogram instead
+histogram <- ggplot(data = mammals, aes(x=adult_body_mass_g)) +
+  geom_histogram(aes(fill=order)) +
+  scale_x_log10()
+histogram
+
+# Faceting:
+# Facet with respect to a categorical variable
+# Panels in which sub-plots are arranged according to a categorical grouping variable(s)
+# Make a plot for each order
+facet_plot <- ggplot(data = mammals, aes(x=adult_body_mass_g, y = adult_head_body_len_mm)) +
+  geom_point(aes(size=litter_size)) +
+  scale_x_log10() +
+  facet_wrap(~order)
+facet_plot
+
+# This code adds to mammals a vector of home range categories
+# (we use conditional subsetting to select rows, or individuals, and assign them a factor level in a new vector)
+# Create new caegorical variable:
+mammals$RangeCategory[mammals$home_range_km2 <= 0.01] <- "micro_machines"
+mammals$RangeCategory[mammals$home_range_km2 > 0.01 & mammals$home_range_km2 <= 1] <- "homebodies"
+mammals$RangeCategory[mammals$home_range_km2 > 0.1 & mammals$home_range_km2 <= 10] <- "strollers"
+mammals$RangeCategory[mammals$home_range_km2 > 10 & mammals$home_range_km2 <= 100] <- "roamers"
+mammals$RangeCategory[mammals$home_range_km2 > 100 & mammals$home_range_km2 <= 1000] <- "free_agents"
+mammals$RangeCategory[mammals$home_range_km2 > 1000] <- "transcendentalists"
+
+head(mammals$RangeCategory)
+
+# Use filter to create a subset of our mammals data that only includes a few orders
+# We tell R to put the factor levels in RangeCategory and order in order
+# Now they will plot from small to large
+# We are not changing the order of rows in our data.frame
+OrderSubset<-filter(mammals, order == "Rodentia" | order == "Cetacea" | order=="Primates" | order=="Carnivora") 
+OrderSubset$RangeCategory <- factor(OrderSubset$RangeCategory, levels = c("micro_machines", "homebodies", "strollers", "roamers", "free_agents", "transcendentalists"))
+OrderSubset$order <- factor(OrderSubset$order, levels = c("Rodentia", "Carnivora", "Primates", "Cetacea"))
+
+# Now we make a plot of our new dataset
+Facet_fig <- ggplot(data = OrderSubset, aes(x=adult_body_mass_g)) +
+  geom_histogram(aes(fill=order)) +
+  scale_x_log10() +
+  facet_grid(RangeCategory~order, scales = "free") # display facets with RangeCategory horizontally, and order vertically
+Facet_fig
+
+# Make a figure that summarizes body sizes with respect to the range category, and separately for a few different orders?
+mammals_boxplot <- ggplot(data = OrderSubset, aes(y = adult_body_mass_g, x=order)) +
+  geom_boxplot(aes(color=order)) +
+  scale_y_log10() +
+  facet_grid(RangeCategory~.)
+mammals_boxplot
+
+# Use argument, "stats"
+# you end up with some summarization of your data
+ggplot(data=OrderSubset, aes(x=adult_body_mass_g, y=litter_size)) +
+  geom_point(aes(color=order)) +
+  scale_x_log10() +
+  facet_grid(RangeCategory~order, scales="free")
+  geom_smooth(method=lm)
+
+# Controlling figure appearance - theme    
+# You can customize your own
+ggplot(data=OrderSubset, aes(x=adult_body_mass_g)) +
+  geom_histogram(aes(fill=order)) +
+  scale_x_log10() +
+  facet_grid(RangeCategory~order, scales="free") +
+  theme_bw() +
+  theme(legend.key = element_rect(fill=NA),
+        legend.position = "bottom",
+        axis.title=element_text(angle=0, size=18, face="bold"),
+        legend.text=element_text(angle=0, size=12, face="bold"),
+        panel.background=element_rect(fill=NA))
+
+# install wesanderson package
+install.packages("wesanderson")
+library(wesanderson)
+
+# to see color palettes
+wes_palette("Royal1")
+wes_palette("FantasticFox")
+wes_palette("Zissou")
+wes_palette("GrandBudapest")
+
+ggplot(data=OrderSubset, aes(x=adult_body_mass_g)) +
+  geom_histogram(aes(fill=order)) +
+  scale_x_log10() +
+  facet_grid(RangeCategory~order, scales="free") +
+  scale_fill_manual(values=wes_palette("GrandBudapest2"))
+  theme_bw() +
+  theme(legend.key = element_rect(fill=NA),
+        legend.position = "bottom",
+        axis.title=element_text(angle=0, size=18, face="bold"),
+        legend.text=element_text(angle=0, size=12, face="bold"),
+        panel.background=element_rect(fill=NA))
